@@ -1,0 +1,25 @@
+echo "source ~/mybot_ros2_ws/install/setup.bash" >> ~/.bashrc
+
+ros2 launch mybot_gazebo_ros2 mybot_gazebo.launch.py 
+
+ros2 launch mybot_navigation2 navigation2.launch.py use_sim_time:=True,
+
+로그
+[rviz2-10] [INFO] [1724863599.734335242] [rviz2]: Setting estimate pose: Frame:map, Position(-0.330595, -1.01644, 0), Orientation(0, 0, -1, 0.00060969) = Angle: -3.14037
+[amcl-2] [INFO] [1724863599.735674089] [amcl]: initialPoseReceived
+
+geometry_msgs/PoseWithCovarianceStamped
+
+초기 위치 명령
+ros2 topic pub -1 /initialpose geometry_msgs/PoseWithCovarianceStamped '{ header: {stamp: {sec: 0, nanosec: 0}, frame_id: "map"}, pose: { pose: {position: {x: -0.330595, y: -1.01644, z: 0}, orientation: {x: 0, y: 0, z: -1, w: 0.00060969}}, } }'
+
+위치 이동 1
+ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose '{pose:{header: {stamp: {sec: 0, nanosec: 0}, frame_id: "map"}, pose: {position: {x: 0.89, y: -1.01, z: -0.0}, orientation: {w: 1.0}}}}'
+
+위치 이동 2
+ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose '{pose:{header: {stamp: {sec: 0, nanosec: 0}, frame_id: "map"}, pose: {position: {x: -0.26, y: 0.49, z: -0.0}, orientation: {w: 1.0}}}}'
+
+위치 이동 3
+ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose '{pose:{header: {stamp: {sec: 0, nanosec: 0}, frame_id: "map"}, pose: {position: {x: -0.91, y:  -1.48, z: -0.0}, orientation: {w: 0.0}}}}'
+
+
