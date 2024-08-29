@@ -1,5 +1,11 @@
 echo "source ~/mybot_ros2_ws/install/setup.bash" >> ~/.bashrc
 
+git clone https://github.com/jetsonai/mybot_ros2_ws
+
+cd mybot_ros2_ws
+
+<다른 창>
+
 ros2 launch mybot_gazebo_ros2 mybot_gazebo.launch.py 
 
 ros2 launch mybot_navigation2 navigation2.launch.py use_sim_time:=True,
