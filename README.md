@@ -33,6 +33,8 @@ ros2 launch mybot_navigation2 navigation2.launch.py map:=$HOME/map.yaml use_sim_
 
 -------------------------------------
 
+# 참고 (설치 패키지)
+
 apt install ros-foxy-joint-state-publisher ros-foxy-joint-state-publisher-gui ros-foxy-xacro ros-foxy-gazebo-ros ros-foxy-gazebo-ros-pkgs
 
 
