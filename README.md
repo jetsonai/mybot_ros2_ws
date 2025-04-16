@@ -20,7 +20,8 @@ ros2 launch mybot_cartographer cartographer.launch.py use_sim_time:=True
 
 ros2 run mybot_teleop teleop_keyboard
 
-ros2 launch rsaembot_cartographer cartographer.launch.py
+ros2 run nav2_map_server map_saver_cli -f ~/map2
+
 
 -------------------
 
