@@ -42,7 +42,7 @@ ros2 run nav2_map_server map_saver_cli -f ~/map2
 ros2 launch mybot_gazebo_ros2 mybot_gazebo.launch.py
 
 
-  
+ 
 *ubuntu pc 에서 실행
 
 ros2 launch mybot_navigation2 navigation2.launch.py map:=$HOME/map.yaml use_sim_time:=True
