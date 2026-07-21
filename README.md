@@ -2,7 +2,18 @@ https://drive.google.com/drive/folders/1cPjRMJ0FgUWQ0LtHhhFODVtklhpX556u?usp=sha
 
 # mybot_ros2_ws
 
-ros2 foxy mybot
+cd ~
+
+git clone https://github.com/jetsonai/mybot_ros2_ws
+
+cd mybot_ros2_ws
+
+colcon build
+
+echo "source /home/nvidia/mybot_ros2_ws/install/setup.bash" >> ~/.bashrc
+
+source ~/.bashrc
+
 
 ## teleop
 
@@ -11,7 +22,6 @@ ros2 foxy mybot
 ros2 launch mybot_gazebo_ros2 mybot_gazebo.launch.py
 
 
- 
 *ubuntu pc 에서 실행
 
 ros2 launch mybot_gazebo_ros2 mybot_gazebo_rviz.launch.py
