@@ -10,7 +10,7 @@ cd mybot_ros2_ws
 
 colcon build
 
-echo "source /home/nvidia/mybot_ros2_ws/install/setup.bash" >> ~/.bashrc
+echo "source ./install/setup.bash" >> ~/.bashrc
 
 source ~/.bashrc
 
