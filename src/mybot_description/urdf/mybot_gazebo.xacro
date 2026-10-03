@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!--
+  Gazebo Sim (Fortress, ROS 2 Humble) 용 플러그인/센서 정의
+  기존 gazebo_ros_pkgs(libgazebo_ros_*.so) 플러그인을 전부 교체했습니다.
+  - 토픽은 Gazebo 쪽 이름이며, ros_gz_bridge 로 ROS 2 에 넘깁니다.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ===== 차동구동 (구: libgazebo_ros_diff_drive.so) ===== -->
+  <gazebo>
+    <plugin filename="ignition-gazebo-diff-drive-system"
+            name="ignition::gazebo::systems::DiffDrive">
+      <left_joint>left_wheel_hinge</left_joint>
+      <right_joint>right_wheel_hinge</right_joint>
+
+      <!-- 바퀴 조인트가 chassis 기준 y=±0.15 에 있으므로 간격은 0.3 m (구 파일의 0.4 는 오타로 보임) -->
+      <wheel_separation>0.3</wheel_separation>
+      <wheel_radius>0.1</wheel_radius>
+
+      <odom_publish_frequency>30</odom_publish_frequency>
+      <max_linear_acceleration>1.0</max_linear_acceleration>
+      <max_angular_acceleration>2.0</max_angular_acceleration>
+
+      <!-- Gazebo 토픽 이름: 브릿지에서 그대로 /cmd_vel, /odom, /tf 로 매핑 -->
+      <topic>cmd_vel</topic>
+      <odom_topic>odom</odom_topic>
+      <tf_topic>/tf</tf_topic>
+
+      <frame_id>odom</frame_id>
+      <child_frame_id>chassis</child_frame_id>
+    </plugin>
+
+    <!-- 바퀴 조인트 상태 → /joint_states (robot_state_publisher 가 바퀴 TF 를 만듦)
+         (구: publish_wheel_tf 역할) -->
+    <plugin filename="ignition-gazebo-joint-state-publisher-system"
+            name="ignition::gazebo::systems::JointStatePublisher">
+      <topic>joint_states</topic>
+      <joint_name>left_wheel_hinge</joint_name>
+      <joint_name>right_wheel_hinge</joint_name>
+    </plugin>
+  </gazebo>
+
+  <!-- ===== 마찰 설정 ===== -->
+  <!-- chassis 링크 안의 캐스터(구) 충돌체: 미끄러지도록 마찰 0 -->
+  <gazebo reference="chassis">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+  <gazebo reference="left_wheel">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
+  <gazebo reference="right_wheel">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
+
+  <!-- ===== LiDAR (구: type="ray" + libgazebo_ros_ray_sensor.so) =====
+       플러그인이 아니라 센서 자체를 선언하고, 월드 SDF 의 Sensors 시스템이 처리합니다. -->
+  <gazebo reference="hokuyo">
+    <sensor name="head_hokuyo_sensor" type="gpu_lidar">
+      <pose>0 0 0 0 0 0</pose>
+      <topic>scan</topic>
+      <ignition_frame_id>hokuyo</ignition_frame_id>
+      <update_rate>40</update_rate>
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.570796</min_angle>
+            <max_angle>1.570796</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
+  <!-- ===== IMU (구: libgazebo_ros_imu_sensor.so) ===== -->
+  <gazebo reference="imu_link">
+    <sensor name="imu_sensor" type="imu">
+      <topic>imu</topic>
+      <ignition_frame_id>imu_link</ignition_frame_id>
+      <update_rate>30</update_rate>
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+    </sensor>
+  </gazebo>
+
+</robot>

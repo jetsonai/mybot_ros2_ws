@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<!--
+  Gazebo Sim (Fortress) 용 월드.
+  기존 example.world(Gazebo Classic) 의 3.5m x 3.5m 벽 4개를 그대로 옮겼습니다.
+  Gazebo Sim 은 월드에 시스템 플러그인을 명시해야 물리/센서가 동작합니다.
+-->
+<sdf version="1.7">
+  <world name="default">
+
+    <!-- ===== 필수 시스템 플러그인 ===== -->
+    <plugin filename="ignition-gazebo-physics-system"
+            name="ignition::gazebo::systems::Physics"/>
+    <plugin filename="ignition-gazebo-user-commands-system"
+            name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="ignition-gazebo-scene-broadcaster-system"
+            name="ignition::gazebo::systems::SceneBroadcaster"/>
+    <!-- gpu_lidar 를 위한 센서 시스템. WSL2 에서는 ogre2 가 죽는 경우가 많아 ogre 사용. -->
+    <plugin filename="ignition-gazebo-sensors-system"
+            name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre</render_engine>
+    </plugin>
+    <plugin filename="ignition-gazebo-imu-system"
+            name="ignition::gazebo::systems::Imu"/>
+
+    <physics name="1ms" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>false</shadows>
+    </scene>
+
+    <light name="sun" type="directional">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>100 100</size></plane>
+          </geometry>
+          <surface>
+            <friction><ode><mu>100</mu><mu2>50</mu2></ode></friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>100 100</size></plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== 벽 4개 (기존 월드의 실제 위치 기준) ===== -->
+    <model name="walls">
+      <static>true</static>
+      <link name="Wall_0">
+        <pose>-0.0237 1.1418 1.25 0 0 0</pose>
+        <collision name="c"><geometry><box><size>3.5 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>3.5 0.15 2.5</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material></visual>
+      </link>
+      <link name="Wall_1">
+        <pose>1.6513 -0.5331 1.25 0 0 -1.5708</pose>
+        <collision name="c"><geometry><box><size>3.5 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>3.5 0.15 2.5</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material></visual>
+      </link>
+      <link name="Wall_2">
+        <pose>-0.0237 -2.2082 1.25 0 0 3.1416</pose>
+        <collision name="c"><geometry><box><size>3.5 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>3.5 0.15 2.5</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material></visual>
+      </link>
+      <link name="Wall_3">
+        <pose>-1.6987 -0.5331 1.25 0 0 1.5708</pose>
+        <collision name="c"><geometry><box><size>3.5 0.15 2.5</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>3.5 0.15 2.5</size></box></geometry>
+          <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material></visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
